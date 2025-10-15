@@ -23,7 +23,16 @@ export default function IntroVideoOverlay({ onComplete }: IntroVideoOverlayProps
   useEffect(() => {
     const video = document.getElementById("intro-video") as HTMLVideoElement;
     if (video) {
-      video.play();
+      // Add error handling and preload optimization
+      video.addEventListener('loadeddata', () => {
+        video.play().catch(console.error);
+      });
+      
+      video.addEventListener('error', (e) => {
+        console.error('Video failed to load:', e);
+        // Auto-skip if video fails to load
+        handleSkip();
+      });
     }
   }, []);
 
@@ -41,9 +50,11 @@ export default function IntroVideoOverlay({ onComplete }: IntroVideoOverlayProps
             className="h-full w-full object-cover"
             muted
             playsInline
+            preload="metadata"
             onEnded={handleVideoEnd}
           >
             <source src="/assets/one.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
           </video>
 
           <Button

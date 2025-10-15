@@ -8,7 +8,7 @@ export default function AboutPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
+  
   const values = [
     {
       icon: Shield,

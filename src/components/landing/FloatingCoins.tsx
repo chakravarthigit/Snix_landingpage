@@ -37,14 +37,17 @@ export default function FloatingCoins({ isActive = true }: FloatingCoinsProps) {
   const animationRef = useRef<number>();
 
   useEffect(() => {
-    // Create initial coins
-    const initialCoins = Array.from({ length: 12 }, (_, i) => ({
+    // Only create coins if active and window is available
+    if (!isActive || typeof window === 'undefined') return;
+
+    // Create initial coins with reduced count for better performance
+    const initialCoins = Array.from({ length: 8 }, (_, i) => ({
       id: i,
       x: Math.random() * (window.innerWidth - 60),
       y: -50 - Math.random() * 300,
       image: coinImages[i % coinImages.length],
-      size: 35 + Math.random() * 25, // 35-60px
-      speed: 1.5 + Math.random() * 2.5, // 1.5-4px per frame
+      size: 35 + Math.random() * 20, // 35-55px (reduced size range)
+      speed: 1 + Math.random() * 2, // 1-3px per frame (reduced speed)
       rotation: 0,
       isDragging: false,
       dragOffset: { x: 0, y: 0 },

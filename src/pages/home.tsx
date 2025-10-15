@@ -1,48 +1,24 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import IntroVideoOverlay from "@/components/landing/IntroVideoOverlay";
 import HeroSection from "@/components/landing/HeroSection";
 import InfoSection from "@/components/landing/InfoSection";
-import VideoSection2 from "@/components/landing/VideoSection2";
-import VideoSection3 from "@/components/landing/VideoSection3";
 import Footer from "@/components/landing/Footer";
 import FloatingCoins from "@/components/landing/FloatingCoins";
 import ControlPanel from "@/components/ui/ControlPanel";
 
+// Lazy load heavy components
+const VideoSection2 = lazy(() => import("@/components/landing/VideoSection2"));
+const VideoSection3 = lazy(() => import("@/components/landing/VideoSection3"));
+
 export default function HomePage() {
-  // Show intro video on page refresh/direct visit, skip on internal navigation
+  // Simplified intro video logic - show on fresh page loads only
   const [showIntro, setShowIntro] = useState(() => {
     if (typeof window !== 'undefined') {
-      // Check if user has navigated from internal pages in this session
-      const hasNavigatedInternally = sessionStorage.getItem('hasNavigatedInternally');
-      
-      // Get current hostname for production deployment
-      const currentHostname = window.location.hostname;
-      
-      // Check if coming from internal navigation (any internal page)
-      const isFromInternalPage = document.referrer && 
-        document.referrer.includes(currentHostname) &&
-        (document.referrer.includes('/privacy') || 
-         document.referrer.includes('/terms') || 
-         document.referrer.includes('/contact') ||
-         document.referrer.includes('/about') ||
-         document.referrer.includes('/blog') ||
-         document.referrer.includes('/careers'));
-      
-      // If coming from internal page, mark as navigated internally
-      if (isFromInternalPage) {
-        sessionStorage.setItem('hasNavigatedInternally', 'true');
-        return false; // Don't show intro
-      }
-      
-      // If user has navigated internally before in this session, don't show intro
-      if (hasNavigatedInternally) {
-        return false;
-      }
-      
-      // Show intro on fresh page loads, direct visits, or external referrals
-      return true;
+      // Simple check: show intro unless user has seen it in this session
+      const hasSeenIntro = sessionStorage.getItem('hasSeenIntro');
+      return !hasSeenIntro;
     }
-    return true; // Default to showing intro on server-side rendering
+    return true; // Default to showing intro
   });
   const [coinsActive, setCoinsActive] = useState(true);
 
@@ -52,8 +28,8 @@ export default function HomePage() {
 
   const handleIntroComplete = () => {
     setShowIntro(false);
-    // Mark that user has seen intro and navigated internally
-    sessionStorage.setItem('hasNavigatedInternally', 'true');
+    // Mark that user has seen intro in this session
+    sessionStorage.setItem('hasSeenIntro', 'true');
   };
 
   return (
@@ -70,8 +46,12 @@ export default function HomePage() {
         
         <HeroSection />
         <InfoSection />
-        <VideoSection2 />
-        <VideoSection3 />
+        <Suspense fallback={<div className="h-96 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />}>
+          <VideoSection2 />
+        </Suspense>
+        <Suspense fallback={<div className="h-96 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />}>
+          <VideoSection3 />
+        </Suspense>
         <Footer />
       </div>
     </>
