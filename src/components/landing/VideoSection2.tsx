@@ -29,7 +29,7 @@ export default function VideoSection2() {
   }, [inView]);
 
   return (
-    <section className="relative bg-[#f8f8f8] dark:bg-gray-800 py-32 px-4 overflow-hidden transition-colors duration-300">
+    <section className="relative bg-[#f8f8f8] dark:bg-gray-800 py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden transition-colors duration-300">
       {/* Static background decorative elements */}
       <div className="absolute top-20 right-20 w-48 h-48 bg-gradient-to-br from-[#b2b7d5]/20 to-[#6a5091]/15 rounded-full blur-3xl" />
       <div className="absolute bottom-32 left-16 w-64 h-64 bg-gradient-to-br from-[#ce0000]/8 to-[#b2b7d5]/12 rounded-full blur-3xl" />
@@ -37,16 +37,16 @@ export default function VideoSection2() {
       <div className="absolute bottom-20 left-20 w-40 h-40 bg-gradient-to-br from-[#6a5091]/8 to-[#3f2f67]/10 rounded-full blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <div className="grid items-center gap-20 lg:grid-cols-2">
+        <div className="grid items-center gap-12 sm:gap-16 lg:gap-20 lg:grid-cols-2">
           <motion.div
             ref={ref}
             initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className="space-y-10"
+            className="space-y-6 sm:space-y-8 lg:space-y-10"
           >
             <motion.h2 
-              className="text-4xl font-bold text-[#3f2f67] dark:text-gray-100 md:text-5xl lg:text-6xl leading-tight tracking-tight transition-colors duration-300"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#3f2f67] dark:text-gray-100 leading-tight tracking-tight transition-colors duration-300"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}

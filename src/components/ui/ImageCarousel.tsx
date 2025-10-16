@@ -28,7 +28,7 @@ export default function ImageCarousel() {
   }, [isPaused]);
 
   return (
-    <div className="relative w-full max-w-sm mx-auto">
+    <div className="relative w-full max-w-xs sm:max-w-sm mx-auto">
       {/* Image container */}
       <div 
         className="relative overflow-hidden rounded-3xl shadow-2xl group"

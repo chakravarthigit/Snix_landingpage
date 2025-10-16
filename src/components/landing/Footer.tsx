@@ -5,7 +5,7 @@ import { Shield } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-br from-[#3f2f67] via-[#6a5091] to-[#b2b7d5] dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 py-20 px-4 overflow-hidden transition-colors duration-300">
+    <footer className="relative bg-gradient-to-br from-[#3f2f67] via-[#6a5091] to-[#b2b7d5] dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden transition-colors duration-300">
       {/* Premium background effects with new colors */}
       <motion.div
         className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#ce0000]/12 to-[#b2b7d5]/10 rounded-full blur-3xl"
@@ -36,7 +36,7 @@ export default function Footer() {
       />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <div className="grid gap-12 md:grid-cols-4">
+        <div className="grid gap-8 sm:gap-10 lg:gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

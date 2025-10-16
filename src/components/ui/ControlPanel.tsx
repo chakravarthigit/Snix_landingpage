@@ -38,10 +38,10 @@ export default function ControlPanel({ onToggleCoins, coinsActive }: ControlPane
   };
 
   return (
-    <div className="fixed top-6 right-6 z-[100] flex gap-4">
+    <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-[100] flex gap-2 sm:gap-4">
       {/* Dark Mode Toggle Switch */}
-      <div className="flex items-center gap-2">
-        <Moon className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+      <div className="flex items-center gap-1 sm:gap-2">
+        <Moon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-700 dark:text-gray-300" />
         <button
           onClick={toggleDarkMode}
           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
@@ -58,8 +58,8 @@ export default function ControlPanel({ onToggleCoins, coinsActive }: ControlPane
       </div>
 
       {/* Coin Animation Toggle Switch */}
-      <div className="flex items-center gap-2">
-        <Coins className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+      <div className="flex items-center gap-1 sm:gap-2">
+        <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-gray-700 dark:text-gray-300" />
         <button
           onClick={onToggleCoins}
           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${

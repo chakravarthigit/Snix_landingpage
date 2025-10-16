@@ -19,7 +19,7 @@ export default function LaunchingSoonPopup({ isOpen, onClose }: LaunchingSoonPop
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6"
         >
           {/* Popup */}
           <motion.div
@@ -27,7 +27,7 @@ export default function LaunchingSoonPopup({ isOpen, onClose }: LaunchingSoonPop
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             onClick={handleBackdropClick}
-            className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-200 dark:border-gray-600 transition-colors duration-300"
+            className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 max-w-sm sm:max-w-md w-full shadow-2xl border border-gray-200 dark:border-gray-600 transition-colors duration-300"
           >
               {/* Close button */}
               <button

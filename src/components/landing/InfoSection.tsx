@@ -44,7 +44,7 @@ export default function InfoSection() {
   });
 
   return (
-    <section className="relative overflow-hidden bg-white dark:bg-gray-900 py-32 px-4 transition-colors duration-300">
+    <section className="relative overflow-hidden bg-white dark:bg-gray-900 py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       {/* Static background elements */}
       <div className="absolute top-20 left-20 w-40 h-40 bg-[#b2b7d5]/15 rounded-full blur-3xl" />
       <div className="absolute bottom-40 right-20 w-56 h-56 bg-[#6a5091]/10 rounded-full blur-3xl" />
@@ -57,10 +57,10 @@ export default function InfoSection() {
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="mb-24 text-center"
+          className="mb-12 sm:mb-16 lg:mb-24 text-center"
         >
           <motion.h2 
-            className="mb-8 text-4xl font-bold text-[#3f2f67] dark:text-gray-100 md:text-5xl lg:text-6xl tracking-tight transition-colors duration-300"
+            className="mb-6 sm:mb-8 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#3f2f67] dark:text-gray-100 tracking-tight transition-colors duration-300"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -71,7 +71,7 @@ export default function InfoSection() {
             <br />
           </motion.h2>
           <motion.p 
-            className="mx-auto max-w-4xl text-lg text-[#6a5091] dark:text-gray-300 md:text-xl lg:text-2xl leading-relaxed font-medium transition-colors duration-300"
+            className="mx-auto max-w-4xl text-base sm:text-lg md:text-xl lg:text-2xl text-[#6a5091] dark:text-gray-300 leading-relaxed font-medium transition-colors duration-300"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -81,7 +81,7 @@ export default function InfoSection() {
         </motion.div>
 
         {/* Workflow Steps */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5 mb-20">
+        <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-5 mb-12 sm:mb-16 lg:mb-20">
           {workflowSteps.map((step, index) => (
             <motion.div
               key={index}
@@ -89,13 +89,13 @@ export default function InfoSection() {
               transition={{ duration: 0.6, delay: index * 0.15 }}
               className="relative"
             >
-              <Card className="group relative h-full border-none bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+              <Card className="group relative h-full border-none bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
                 {/* Icon with simple styling */}
-                <div className="mb-6 inline-flex p-4 rounded-2xl bg-gradient-to-br from-[#ce0000]/10 to-[#6a5091]/10">
-                  <step.icon className="h-10 w-10 text-[#ce0000]" />
+                <div className="mb-4 sm:mb-6 inline-flex p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-[#ce0000]/10 to-[#6a5091]/10">
+                  <step.icon className="h-8 w-8 sm:h-10 sm:w-10 text-[#ce0000]" />
                 </div>
                 
-                <h3 className="mb-4 text-lg font-bold text-[#3f2f67] dark:text-gray-100 transition-colors duration-300">
+                <h3 className="mb-3 sm:mb-4 text-base sm:text-lg font-bold text-[#3f2f67] dark:text-gray-100 transition-colors duration-300">
                   {step.title}
                 </h3>
                 <p className="text-sm text-[#6a5091] dark:text-gray-300 leading-relaxed transition-colors duration-300">

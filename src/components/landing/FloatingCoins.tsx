@@ -103,8 +103,13 @@ export default function FloatingCoins({ isActive = true }: FloatingCoinsProps) {
     };
   }, [isActive]);
 
-  const handleMouseDown = (e: React.MouseEvent, coinId: number) => {
+  const handlePointerDown = (e: React.PointerEvent, coinId: number) => {
     e.preventDefault();
+    e.stopPropagation();
+    
+    // Capture the pointer for better mobile support
+    e.currentTarget.setPointerCapture(e.pointerId);
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
@@ -115,30 +120,84 @@ export default function FloatingCoins({ isActive = true }: FloatingCoinsProps) {
         : coin
     ));
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: PointerEvent) => {
+      e.preventDefault();
       setCoins(prev => prev.map(coin => 
         coin.id === coinId && coin.isDragging
           ? { 
               ...coin, 
-              x: e.clientX - coin.dragOffset.x, 
-              y: e.clientY - coin.dragOffset.y 
+              x: Math.max(0, Math.min(window.innerWidth - coin.size, e.clientX - coin.dragOffset.x)), 
+              y: Math.max(0, Math.min(window.innerHeight - coin.size, e.clientY - coin.dragOffset.y))
             }
           : coin
       ));
     };
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
       setCoins(prev => prev.map(coin => 
         coin.id === coinId 
           ? { ...coin, isDragging: false }
           : coin
       ));
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerup', handlePointerUp);
+      document.removeEventListener('pointercancel', handlePointerUp);
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('pointermove', handlePointerMove, { passive: false });
+    document.addEventListener('pointerup', handlePointerUp);
+    document.addEventListener('pointercancel', handlePointerUp);
+  };
+
+  // Fallback touch handlers for older browsers that don't support pointer events
+  const handleTouchStart = (e: React.TouchEvent, coinId: number) => {
+    // Only use touch handlers if pointer events are not supported
+    if ('onpointerdown' in window) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = touch.clientX - rect.left;
+    const offsetY = touch.clientY - rect.top;
+
+    setCoins(prev => prev.map(coin => 
+      coin.id === coinId 
+        ? { ...coin, isDragging: true, dragOffset: { x: offsetX, y: offsetY } }
+        : coin
+    ));
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      if (touch) {
+        setCoins(prev => prev.map(coin => 
+          coin.id === coinId && coin.isDragging
+            ? { 
+                ...coin, 
+                x: Math.max(0, Math.min(window.innerWidth - coin.size, touch.clientX - coin.dragOffset.x)), 
+                y: Math.max(0, Math.min(window.innerHeight - coin.size, touch.clientY - coin.dragOffset.y))
+              }
+            : coin
+        ));
+      }
+    };
+
+    const handleTouchEnd = () => {
+      setCoins(prev => prev.map(coin => 
+        coin.id === coinId 
+          ? { ...coin, isDragging: false }
+          : coin
+      ));
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener('touchcancel', handleTouchEnd);
+    };
+
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd);
+    document.addEventListener('touchcancel', handleTouchEnd);
   };
 
   const handleClick = (coin: Coin) => {
@@ -156,25 +215,36 @@ export default function FloatingCoins({ isActive = true }: FloatingCoinsProps) {
       {coins.map((coin) => (
         <div
           key={coin.id}
-          className="absolute pointer-events-auto cursor-grab active:cursor-grabbing select-none"
+          className="absolute pointer-events-auto cursor-grab active:cursor-grabbing select-none touch-none"
           style={{
             left: coin.x,
             top: coin.y,
             width: coin.size,
             height: coin.size,
-            transform: `rotate(${coin.rotation}deg)`,
+            transform: `rotate(${coin.rotation}deg) ${coin.isDragging ? 'scale(1.1)' : 'scale(1)'}`,
             transition: coin.isDragging ? 'none' : 'transform 0.1s ease-out',
+            touchAction: 'none',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            WebkitTouchCallout: 'none',
+            WebkitTapHighlightColor: 'transparent',
+            zIndex: coin.isDragging ? 1000 : 'auto',
           }}
-          onMouseDown={(e) => handleMouseDown(e, coin.id)}
+          onPointerDown={(e) => handlePointerDown(e, coin.id)}
+          onTouchStart={(e) => handleTouchStart(e, coin.id)}
           onClick={() => !coin.isDragging && handleClick(coin)}
         >
           <img
             src={coin.image}
             alt="Crypto coin"
-            className="w-full h-full object-contain drop-shadow-lg hover:drop-shadow-xl transition-all duration-200 hover:scale-110"
+            className="w-full h-full object-contain drop-shadow-lg hover:drop-shadow-xl transition-all duration-200 pointer-events-none"
             style={{
-              filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) brightness(1.05)',
-            }}
+              filter: `drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) brightness(1.05) ${coin.isDragging ? 'brightness(1.2)' : ''}`,
+              touchAction: 'none',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              WebkitUserDrag: 'none' as any,
+            } as React.CSSProperties}
             draggable={false}
             onError={(e) => {
               // Fallback to a default coin if image fails to load
