@@ -21,7 +21,14 @@ export default function VideoSection2() {
   useEffect(() => {
     if (videoRef.current) {
       if (inView) {
-        videoRef.current.play();
+        // Only load video when in view
+        if (!videoRef.current.src && videoRef.current.dataset.src) {
+          videoRef.current.src = videoRef.current.dataset.src;
+          videoRef.current.load();
+        }
+        videoRef.current.play().catch(() => {
+          // Ignore autoplay errors
+        });
       } else {
         videoRef.current.pause();
       }
@@ -104,15 +111,18 @@ export default function VideoSection2() {
               {/* Subtle background glow */}
               <div className="absolute -inset-4 bg-gradient-to-r from-[#ce0000]/10 to-[#6a5091]/10 rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-all duration-500" />
               
-              {/* Clean video without border */}
+              {/* Clean video without border - Lazy loaded */}
               <video
                 ref={videoRef}
                 muted
                 loop
                 playsInline
-                className="relative w-full max-w-2xl rounded-2xl shadow-2xl transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_25px_50px_rgba(206,0,0,0.15)]"
+                preload="none"
+                data-src="/assets/two.mp4"
+                className="relative w-full max-w-2xl rounded-2xl shadow-2xl transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_25px_50px_rgba(206,0,0,0.15)] bg-gray-200 dark:bg-gray-700"
+                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Crect fill='%23f3f4f6' width='800' height='600'/%3E%3C/svg%3E"
               >
-                <source src="/assets/two.mp4" type="video/mp4" />
+                <source data-src="/assets/two.mp4" type="video/mp4" />
               </video>
               
             </div>
